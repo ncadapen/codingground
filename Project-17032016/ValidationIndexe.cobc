@@ -1,0 +1,50 @@
+IDENTIFICATION DIVISION.
+	PROGRAM-ID. NEWPROGS.
+
+	ENVIRONMENT DIVISION.
+	INPUT-OUTPUT SECTION.
+    FILE-CONTROL.
+	  SELECT FICHIER3 ASSIGN "/home/cg/root/Data/idepenses1"
+      ORGANIZATION IS INDEXED
+      RECORD KEY IS DEP-ID
+      ACCESS IS RANDOM.
+	
+    DATA DIVISION.
+    FILE SECTION.
+	FD FICHIER3.
+	01 DEPREC.
+	   02 DEP-DATE PIC 9(8).
+       02 DEP-ID PIC 9(8).    
+       02 DEP-MONTANT PIC 9(4)v99.
+       02 DEP-CATEG PIC X(3).
+    
+    WORKING-STORAGE SECTION.
+    77 WSS-EOF PIC 9 VALUE 0.
+    01 WSS-DEPREC.
+       02 WSS-DEP-DATE PIC 9(8).
+       02 WSS-DEP-ID PIC 9(8).    
+       02 WSS-DEP-MONTANT PIC 9(4)v99.
+       02 WSS-DEP-CATEG PIC X(3).
+  
+    01 FIN-DEPENSE PIC X.
+       88 NOTEOF-DEPENSE VALUE '0'.
+       88 EOF-DEPENSE VALUE '1'.
+    
+    PROCEDURE DIVISION.
+		PERFORM TRAIT-LEC.
+		STOP RUN.
+		
+    
+	TRAIT-LEC.
+	OPEN INPUT FICHIER3.
+	perform until wss-eof=1
+	READ fichier3 NEXT RECORD INTO wss-deprec
+    AT END move 1 to wss-eof
+    NOT AT END DISPLAY 'Details de Dépenses :'wss-dep-date'*'wss-dep-id'*'wss-dep-montant'*'wss-dep-categ
+    END-READ
+    end-perform.
+    CLOSE FICHIER3.
+	TRAIT-LEC-F.
+	EXIT.
+	
+	
